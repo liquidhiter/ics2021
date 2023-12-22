@@ -147,15 +147,20 @@ static int parse_si_arg(char* args, uint64_t* step) {
    * 1. Only digits are allowed to appear
    * 2. Maximum 20 characters considering maximum value of uint64_t, should be handled by strtoull()
    */
-  char step_digits = ' ';
-  for (; (next_char = *(args + next_pos)) != ']' && next_char != '\0'; next_pos++, *step_digits += next_char);
+  uint64_t start_of_digit = next_pos;
+  uint64_t num_of_digits = 0;
+  for (; (next_char = *(args + next_pos)) != ']' && next_char != '\0'; next_pos++, num_of_digits++);
   
   if (next_char == '\0') {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid argument is found: %s", step_digits);
+    Log("DEV LOG: parse_si_arg: invalid argument is found: %c", next_char);
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
+
+  /* Copy the found number of characters supposed to contain an integer */
+  char step_digits[num_of_digits];
+  strncpy(step_digits, args + start_of_digit, num_of_digits);
 
   /* Convert the string to the number */
   char *end;
@@ -163,7 +168,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
   /* Ignore all errors happening before */
   errno = 0;
   step_val = strtoull(step_digits, &end, 10);
-  if (end == step_digits || *end != '\0' || ERANGE == error) {
+  if (end == step_digits || *end != '\0' || ERANGE == errno) {
 #ifdef DEV_LOG
     Log("DEV LOG: parse_si_arg: invalid argument is found: %s", step_digits);
 #endif /*DEV_LOG*/
@@ -182,6 +187,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
   if (next_char != '\0') {
 #ifdef DEV_LOG
     Log("DEV LOG: parse_si_arg: invalid arguments are appending after ]: %c", next_char);
+#endif
     return SI_STEP_INVALID;
   }
 
@@ -197,7 +203,7 @@ static int cmd_si(char *args) {
    * 3. not allow the argument to contain more than one whitespace when there is no step number, e.x. si(\s)*
    *    this is to simplify argument parsing
    */
-  uint64_t step_val;
+  uint64_t step_val = 0;
   int parse_result = parse_si_arg(args, &step_val);
   if (SI_STEP_INVALID == parse_result) {
     return 1;
