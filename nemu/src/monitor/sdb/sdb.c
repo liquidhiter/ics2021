@@ -155,8 +155,10 @@ static int parse_si_arg(char* args, uint64_t* step) {
   }
 
   /* Copy the found number of characters supposed to contain an integer */
-  char step_digits[num_of_digits];
+  char step_digits[num_of_digits + 1];
   strncpy(step_digits, args + start_of_digit, num_of_digits);
+  /* Append the null char */
+  step_digits[num_of_digits + 1] = '\0';
 
   /* Convert the string to the number */
   char *end;
