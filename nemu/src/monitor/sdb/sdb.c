@@ -92,16 +92,28 @@ static int cmd_help(char *args) {
   return 0;
 }
 
-enum {SI_STEP_SINGLE = 0x001, SI_STEP_MULTIPLE = 0x010, SI_STEP_INVALID = 0x100, };
+/**
+ * @brief  
+ * @note   
+ */
+enum {SI_STEP_VALID = 0x01, SI_STEP_INVALID = 0x10,};
+
+/**
+ * @brief  
+ * @note   
+ * @param  args: 
+ * @param  step: 
+ * @retval 
+ */
 static int parse_si_arg(char* args, uint64_t* step) {
 
   /* CASE 1: no argument is found after parsing the command line argument by strtok */
   if (NULL == args) {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: no argument is found after parsing the command line argument by strtok\n");
+    Log("DEV LOG: no argument is found after parsing the command line argument by strtok\n");
 #endif /*DEV_LOG*/
     *step = 1U;
-    return SI_STEP_SINGLE;
+    return SI_STEP_VALID;
   }
 
   uint64_t next_pos;
@@ -113,15 +125,16 @@ static int parse_si_arg(char* args, uint64_t* step) {
   /* Check the first non-whitespace character */
   if (next_char == '0') {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: argument only contains whitespaces\n");
+    Log("DEV LOG: argument only contains whitespaces\n");
 #endif /*DEV_LOG*/
-    return SI_STEP_SINGLE;
+    *step = 1U;
+    return SI_STEP_VALID;
   }
 
   /* CASE 3: non-whitespace argument(s) is found, which can be invalid though */
   if (next_char != '[') {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid argument is found: %c", next_char);
+    Log("DEV LOG: invalid argument is found: %c", next_char);
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
@@ -134,7 +147,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
   /* Check the first non-whitespace character */
   if (next_char < '0' || next_char > '9') {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid argument is found: %c", next_char);
+    Log("DEV LOG: invalid argument is found: %c", next_char);
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
@@ -143,20 +156,19 @@ static int parse_si_arg(char* args, uint64_t* step) {
    * 1. Only digits are allowed to appear
    * 2. Maximum 20 characters considering maximum value of uint64_t, should be handled by strtoull()
    */
-  uint64_t start_of_digit = next_pos;
   uint64_t num_of_digits = 0;
   for (; (next_char = *(args + next_pos)) != ']' && next_char != '\0' && next_char != ' '; next_pos++, num_of_digits++);
   
   if (next_char == '\0') {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid argument is found: %c", next_char);
+    Log("DEV LOG: invalid argument is found: %c", next_char);
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
 
   /* Copy the found number of characters supposed to contain an integer */
   char step_digits[num_of_digits + 1];
-  strncpy(step_digits, args + start_of_digit, num_of_digits);
+  strncpy(step_digits, args + next_pos - num_of_digits, num_of_digits);
   /* Append the null char */
   step_digits[num_of_digits] = '\0';
 
@@ -166,9 +178,9 @@ static int parse_si_arg(char* args, uint64_t* step) {
   /* Ignore all errors happening before */
   errno = 0;
   step_val = strtoull(step_digits, &end, 10);
-  if (end == step_digits || *end != '\0' || ERANGE == errno) {
+  if (end == step_digits || *end != '\0' || ERANGE == errno || step_val == 0) {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid argument is found: %s, num_of_digits = %lu, start_of_digit = %lu", step_digits, num_of_digits, start_of_digit);
+    Log("DEV LOG: invalid argument is found: %s", step_digits);
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
@@ -181,7 +193,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
 
   if ((next_char = *(args + next_pos)) != ']') {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid argument is found: %s", args);
+    Log("DEV LOG: invalid argument is found: %s", args);
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
@@ -195,12 +207,12 @@ static int parse_si_arg(char* args, uint64_t* step) {
   /* Argument is considered as invalid even the given digits are perfectly correct if there is trailing characters other than end char */
   if (next_char != '\0') {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid arguments are appending after ]: %c", next_char);
+    Log("DEV LOG: invalid arguments are appending after ]: %c", next_char);
 #endif
     return SI_STEP_INVALID;
   }
 
-  return SI_STEP_MULTIPLE;
+  return SI_STEP_VALID;
 }
 
 static int cmd_si(char *args) {
