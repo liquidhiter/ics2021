@@ -123,7 +123,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
   for (next_pos = 0; (next_char = *(args + next_pos)) == ' '; next_pos++);
 
   /* Check the first non-whitespace character */
-  if (next_char == '0') {
+  if (next_char == '\0') {
 #ifdef DEV_LOG
     Log("DEV LOG: argument only contains whitespaces\n");
 #endif /*DEV_LOG*/
