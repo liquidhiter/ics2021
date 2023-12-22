@@ -256,7 +256,7 @@ static void test_parse_si_arg() {
 
 
 
-int main(int argc, char *argv[]) {
+int _main(int argc, char *argv[]) {
     test_parse_si_arg();
     return 0;
 }
