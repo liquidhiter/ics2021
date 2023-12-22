@@ -190,6 +190,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
 #ifdef DEV_LOG
     Log("DEV LOG: parse_si_arg: invalid argument is found: %s", args);
 #endif /*DEV_LOG*/
+    return SI_STEP_INVALID;
   }
 
   /* Points to the next character */
