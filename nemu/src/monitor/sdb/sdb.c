@@ -103,7 +103,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
 #ifdef DEV_LOG
     Log("DEV LOG: parse_si_arg: no argument is found after parsing the command line argument by strtok\n");
 #endif /*DEV_LOG*/
-    *step = 1LU;
+    *step = 1U;
     return SI_STEP_SINGLE;
   }
 
