@@ -145,7 +145,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
    */
   uint64_t start_of_digit = next_pos;
   uint64_t num_of_digits = 0;
-  for (; (next_char = *(args + next_pos)) != ']' && next_char != '\0'; next_pos++, num_of_digits++);
+  for (; (next_char = *(args + next_pos)) != ']' && next_char != '\0' && next_char != ' '; next_pos++, num_of_digits++);
   
   if (next_char == '\0') {
 #ifdef DEV_LOG
@@ -175,10 +175,27 @@ static int parse_si_arg(char* args, uint64_t* step) {
 
   /* Given number of steps must be valid */
   *step = step_val;
+
+  if ((next_char = *(args + next_pos)) == ']') {
+    return SI_STEP_MULTIPLE;
+  }
+
   /* Points to the next character */
   next_pos++;
 
-  /* Read out all tailing whitespaces appending after ']' if exists */
+  /* Read out all tailing whitespaces */
+  for (; (next_char = *(args + next_pos)) == ' '; next_pos++);
+
+  if ((next_char = *(args + next_pos)) != ']') {
+#ifdef DEV_LOG
+    Log("DEV LOG: parse_si_arg: invalid argument is found: %s", args);
+#endif /*DEV_LOG*/
+  }
+
+  /* Points to the next character */
+  next_pos++;
+
+  /* Read out all tailing whitespaces */
   for (; (next_char = *(args + next_pos)) == ' '; next_pos++);
 
   /* Argument is considered as invalid even the given digits are perfectly correct if there is trailing characters other than end char */
