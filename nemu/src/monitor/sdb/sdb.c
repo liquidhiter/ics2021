@@ -4,6 +4,8 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+#include <stdlib.h>
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -34,7 +36,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
-  return -1;
+  exit(0);
 }
 
 static int cmd_help(char *args);
