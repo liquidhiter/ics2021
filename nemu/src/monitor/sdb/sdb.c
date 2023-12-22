@@ -176,9 +176,6 @@ static int parse_si_arg(char* args, uint64_t* step) {
   /* Given number of steps must be valid */
   *step = step_val;
 
-  /* Points to the next character */
-  next_pos++;
-
   /* Read out all tailing whitespaces */
   for (; (next_char = *(args + next_pos)) == ' '; next_pos++);
 
