@@ -168,7 +168,7 @@ static int parse_si_arg(char* args, uint64_t* step) {
   step_val = strtoull(step_digits, &end, 10);
   if (end == step_digits || *end != '\0' || ERANGE == errno) {
 #ifdef DEV_LOG
-    Log("DEV LOG: parse_si_arg: invalid argument is found: %s", step_digits);
+    Log("DEV LOG: parse_si_arg: invalid argument is found: %s, num_of_digits = %lu", step_digits, num_of_digits);
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
