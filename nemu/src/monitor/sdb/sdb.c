@@ -94,9 +94,20 @@ static int cmd_si(char *args) {
   
   /* Format of the argument:
    * 1. allow the leading trailing spaces
-   * 2. allow spaces inside of the bracket [ 20 ] 
+   * 2. allow spaces inside of the bracket [ 20 ]
+   * 3. not allow the argument to contain more than one whitespace when there is no step number, e.x. si(\s)*
+   *    this is to simplify argument parsing
    */
   
+  /* Step is defined to be uint64_t type: see function signature of cpu_exec */
+  uint64_t step;
+  if (NULL == args) {
+    Log("Step Execution Tracer: single step execution with no step number given\n");
+    step = 1;
+  } else {
+    char *arg_str = strtok(args, "[]");
+    Log("argument str = %s\n", arg_str);
+  }
 
   return 0;
 }
