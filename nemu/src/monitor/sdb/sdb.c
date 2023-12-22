@@ -39,6 +39,16 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+/* Single-step exeuction: step into
+ * Implemnetation:
+ * 1> read the command and arguments
+ * 2> argument is 1 by default
+ * 3> argument needs validation
+ * 
+ * returns state code
+ */
+static int cmd_si(char* args);
+
 static struct {
   const char *name;
   const char *description;
@@ -47,7 +57,7 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si", "Execute given number of step(s), one by default", cmd_si},
   /* TODO: Add more commands */
 
 };
@@ -75,6 +85,12 @@ static int cmd_help(char *args) {
     printf("Unknown command '%s'\n", arg);
   }
   return 0;
+}
+
+static int cmd_si(char *args) {
+  Log("Given argument is: %s\n", args);
+  
+  return 1;
 }
 
 void sdb_set_batch_mode() {
