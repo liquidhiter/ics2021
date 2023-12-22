@@ -95,9 +95,6 @@ static int cmd_help(char *args) {
 enum {SI_STEP_SINGLE = 0x001, SI_STEP_MULTIPLE = 0x010, SI_STEP_INVALID = 0x100, };
 static int parse_si_arg(char* args, uint64_t* step) {
 
-  /* step by default points to NULL */
-  step = NULL;
-
   /* CASE 1: no argument is found after parsing the command line argument by strtok */
   if (NULL == args) {
 #ifdef DEV_LOG
