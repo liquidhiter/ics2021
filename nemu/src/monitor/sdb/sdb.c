@@ -176,10 +176,6 @@ static int parse_si_arg(char* args, uint64_t* step) {
   /* Given number of steps must be valid */
   *step = step_val;
 
-  if ((next_char = *(args + next_pos)) == ']') {
-    return SI_STEP_MULTIPLE;
-  }
-
   /* Points to the next character */
   next_pos++;
 
