@@ -138,8 +138,6 @@ static int parse_si_arg(char* args, uint64_t* step) {
 #endif /*DEV_LOG*/
     return SI_STEP_INVALID;
   }
-  /* Points to the next digit */
-  next_pos++;
 
   /* Get the number of steps from the argument starting from next_pos
    * 1. Only digits are allowed to appear
