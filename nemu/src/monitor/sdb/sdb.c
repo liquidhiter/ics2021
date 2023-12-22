@@ -109,7 +109,7 @@ static int cmd_si(char *args) {
     Log("argument str = %s\n", arg_str);
   }
 
-  Log("Step Execution Tracer: given step = %llu\n", step);
+  Log("Step Execution Tracer: given step = %lu\n", step);
 
 
   return 0;
