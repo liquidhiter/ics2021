@@ -92,7 +92,13 @@ static int cmd_help(char *args) {
 static int cmd_si(char *args) {
   Log("Given argument is: %s\n", args);
   
-  return 1;
+  /* Format of the argument:
+   * 1. allow the leading trailing spaces
+   * 2. allow spaces inside of the bracket [ 20 ] 
+   */
+  
+
+  return 0;
 }
 
 void sdb_set_batch_mode() {
