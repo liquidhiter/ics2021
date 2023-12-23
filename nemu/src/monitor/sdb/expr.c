@@ -6,9 +6,12 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256,
+  TK_NOTYPE = 256, /* start from 256: char is used as the token_type */
   TK_EQ,
   TK_DECIMAL,
+  TK_PARENTHESIS_LEFT,
+  TK_PARENTHESIS_RIGHT,
+  
   /* TODO: Add more token types */
 
 };
@@ -29,6 +32,9 @@ static struct rule {
   {"\\*", '*'},         // multiply
   {"\\/", '/'},         // divide
   {"[:digit:]", TK_DECIMAL},   // decimal digit
+  {"\\(", TK_PARENTHESIS_LEFT},  // left parenthesis
+  {"\\)", TK_PARENTHESIS_RIGHT}, // right parenthesis
+
 };
 
 #define NR_REGEX ARRLEN(rules)
