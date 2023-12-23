@@ -262,9 +262,7 @@ static int parse_info_arg(char* args) {
   }
 
   /* Read out all trailing whitespaces */
-  while(*args == ' ') {
-    args++;
-  }
+  while(*(++args) == ' ');
 
   /* Boil out if the current character is not null char */
   if (*args != '\0') {
