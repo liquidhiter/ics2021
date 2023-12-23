@@ -91,16 +91,35 @@ static bool make_token(char *e) {
 
         position += substr_len;
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
+        /* TODO: Now a new token is recognized with rules[i]. Add code
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
 
+        Token newToken = {};
         switch (rules[i].token_type) {
-          default: TODO();
+          case TK_NOTYPE:
+            /* No need to record spaces */
+            break;
+          case TK_EQ:
+          case TK_PARENTHESIS_LEFT:
+          case TK_PARENTHESIS_RIGHT:
+            newToken.type = rules[i].token_type;
+            tokens[nr_token++] = newToken;
+            break;
+          case TK_DECIMAL:
+            newToken.type = TK_DECIMAL;
+            /* Limit the number of digits to 32 at most to avoid buffer overflow */
+            /* Simple solution: substr_len %= 33; */
+            if (substr_len > 32) {
+              Log("WARNING: token buffer overflow, actual number of decimal digits is %d", substr_len);
+              substr_len = 32;
+            }
+            strncpy(newToken.str, substr_start, substr_len);
+            break;
+          default:
+            break;
         }
-
-        break;
       }
     }
 
