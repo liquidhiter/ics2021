@@ -28,7 +28,7 @@ static struct rule {
   {"-", '-'},           // minus
   {"\\*", '*'},         // multiply
   {"\\/", '/'},         // divide
-  {"\\d", TK_DECIMAL},   // decimal digit
+  {"[:digit:]", TK_DECIMAL},   // decimal digit
 };
 
 #define NR_REGEX ARRLEN(rules)
