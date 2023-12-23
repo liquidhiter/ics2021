@@ -226,16 +226,22 @@ static int parse_si_arg(char* args, uint64_t* step) {
 }
 
 static int cmd_info(char *args) {
+
+  Log("Given argument is: %s\n", args);
+
   if (NULL == args) {
-    Log("Invalid argument:\n \t usage: info [r|w]");
+    Log("Invalid argument: usage info [r|w]");
     return 1;
   }
 
   /* Read out all the leading white-spaces, yes, it is allowed */
-  while(*(args++) == ' ');
+  while(*args == ' ') {
+    args++;
+  }
+
   /* Boil out if the current character is the null char */
   if (*args == '\0') {
-    Log("Empty argument:\n \t usage: info [r|w]");
+    Log("Empty argument: usage info [r|w]");
     return 1;
   }
 
@@ -255,7 +261,7 @@ static int cmd_info(char *args) {
 #endif /*DEV_LOG*/
     TO_BE_IMPLEMENTED();
   } else {
-    Log("Invalid sub-command:\n \t usage: info [r|w]");
+    Log("Invalid sub-command: usage info [r|w]");
     return 1;
   }
 
