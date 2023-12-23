@@ -285,7 +285,7 @@ static int cmd_info(char *args) {
   }
 
   if (INFO_ARG_REGISTER == parse_result) {
-    TO_BE_IMPLEMENTED();
+    isa_reg_display();
   } else if (INFO_ARG_WATCHPOINT == parse_result) {
     TO_BE_IMPLEMENTED();
   } else {
