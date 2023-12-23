@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#define DEV_LOG 1
+// #define DEV_LOG
 
 static int is_batch_mode = false;
 
@@ -99,8 +99,11 @@ static int cmd_help(char *args) {
 enum {SI_STEP_VALID = 0x01, SI_STEP_INVALID = 0x10,};
 
 /**
- * @brief  
- * @note   
+ * @brief Parse the argument of command si to get the number of steps to execute
+ * @note  Following arguments are supported:
+ *        -1: argument is NULL, which means step is set to 1 by default
+ *        -2: argument only contains whitespaces, wh
+ *
  * @param  args: 
  * @param  step: 
  * @retval 
