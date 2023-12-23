@@ -16,6 +16,12 @@ enum {
 
 };
 
+
+/* The characters (,),[,],.,*,?,+,|,^ and $ are special symbols 
+ * and have to be escaped with a backslash symbol in order to be treated as literal characters
+ * @source: https://en.wikibooks.org/wiki/Regular_Expressions/POSIX-Extended_Regular_Expressions
+ */
+
 static struct rule {
   const char *regex;
   int token_type;
@@ -30,7 +36,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
   {"-", '-'},           // minus
   {"\\*", '*'},         // multiply
-  {"\\/", '/'},         // divide
+  {"/", '/'},         // divide
   {"[:digit:]", TK_DECIMAL},   // decimal digit
   {"\\(", TK_PARENTHESIS_LEFT},  // left parenthesis
   {"\\)", TK_PARENTHESIS_RIGHT}, // right parenthesis
