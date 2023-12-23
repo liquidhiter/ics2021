@@ -245,9 +245,6 @@ static int cmd_info(char *args) {
     return 1;
   }
 
-  /* Points to the next character */
-  args++;
-
   /* Get the sub-command */
   if (*args == 'r') {
 #ifdef DEV_LOG
