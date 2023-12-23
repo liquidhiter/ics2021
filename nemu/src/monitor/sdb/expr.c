@@ -32,8 +32,8 @@ static struct rule {
   {"\\*", '*'},         // multiply
   {"\\/", '/'},         // divide
   {"[:digit:]", TK_DECIMAL},   // decimal digit
-  {"\\(", TK_PARENTHESIS_LEFT},  // left parenthesis
-  {"\\)", TK_PARENTHESIS_RIGHT}, // right parenthesis
+  {"(", TK_PARENTHESIS_LEFT},  // left parenthesis
+  {")", TK_PARENTHESIS_RIGHT}, // right parenthesis
 
 };
 
