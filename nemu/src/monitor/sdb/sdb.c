@@ -54,9 +54,12 @@ static int cmd_help(char *args);
  * 
  * returns state code
  */
-static int cmd_si(char* args);
+static int cmd_si(char *args);
 
-static int cmd_info(char* args);
+static int cmd_info(char *args);
+static int cmd_x(char *args);
+
+static int cmd_p(char *args);
 
 static struct {
   const char *name;
@@ -68,6 +71,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute given number of step(s), one by default", cmd_si},
   {"info", "r: Print the register value | w: Print the watch-point status", cmd_info},
+  {"x", "Usage: x N EXPR. Print N numbers of memory starting from the address specified by EXPR", cmd_x},
+  {"p", "Usage: p EXPR. Print the value of EXPR", cmd_p},
   /* TODO: Add more commands */
 
 };
@@ -276,7 +281,6 @@ static int parse_info_arg(char* args) {
   return parse_result;
 }
 
-
 static int cmd_info(char *args) {
   Log("Given argument is: %s\n", args);
   int parse_result = parse_info_arg(args);
@@ -314,6 +318,16 @@ static int cmd_si(char *args) {
   Log("Execute %lu number of steps\n", step_val);
   cpu_exec(step_val);
 
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  TO_BE_IMPLEMENTED();
+  return 0;
+}
+
+static int cmd_p(char *args) {
+  TO_BE_IMPLEMENTED();
   return 0;
 }
 
