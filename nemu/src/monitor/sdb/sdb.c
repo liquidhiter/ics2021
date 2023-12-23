@@ -9,6 +9,8 @@
 
 // #define DEV_LOG
 
+#define TO_BE_IMPLEMENTED() panic("To be implemented")
+
 static int is_batch_mode = false;
 
 void init_regex();
@@ -54,6 +56,8 @@ static int cmd_help(char *args);
  */
 static int cmd_si(char* args);
 
+static int cmd_info(char* args);
+
 static struct {
   const char *name;
   const char *description;
@@ -63,6 +67,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute given number of step(s), one by default", cmd_si},
+  {"info", "r\n: \t Print the register value\n w\n: \t Print the watch-point status\n", cmd_info},
   /* TODO: Add more commands */
 
 };
@@ -102,7 +107,9 @@ enum {SI_STEP_VALID = 0x01, SI_STEP_INVALID = 0x10,};
  * @brief Parse the argument of command si to get the number of steps to execute
  * @note  Following arguments are supported:
  *        -1: argument is NULL, which means step is set to 1 by default
- *        -2: argument only contains whitespaces, wh
+ *        -2: argument only contains whitespaces, step is set to 1 by default
+ *        -3: argument contains leading and trailing whitespaces, e.x. si [ 10 ]   
+ *        -4: 0 is considered as a valid step, although the default step is 1
  *
  * @param  args: 
  * @param  step: 
@@ -216,6 +223,43 @@ static int parse_si_arg(char* args, uint64_t* step) {
   }
 
   return SI_STEP_VALID;
+}
+
+static int cmd_info(char *args) {
+  if (NULL == args) {
+    Log("Invalid argument:\n \t usage: info [r|w]");
+    return 1;
+  }
+
+  /* Read out all the leading white-spaces, yes, it is allowed */
+  while(*(args++) == ' ');
+  /* Boil out if the current character is the null char */
+  if (*args == '\0') {
+    Log("Empty argument:\n \t usage: info [r|w]");
+    return 1;
+  }
+
+  /* Points to the next character */
+  args++;
+
+  /* Get the sub-command */
+  if (*args == 'r') {
+#ifdef DEV_LOG
+    Log("DEV LOG: info sub-command is found %c", *args);
+#endif /*DEV_LOG*/
+    /* Display the value stored in the specified register */
+    TO_BE_IMPLEMENTED();
+  } else if (*args == 'w') {
+#ifdef DEV_LOG
+    Log("DEV LOG: info sub-command is found %c", *args);
+#endif /*DEV_LOG*/
+    TO_BE_IMPLEMENTED();
+  } else {
+    Log("Invalid sub-command:\n \t usage: info [r|w]");
+    return 1;
+  }
+
+  return 0;
 }
 
 static int cmd_si(char *args) {
