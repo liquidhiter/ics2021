@@ -225,13 +225,13 @@ static int parse_si_arg(char* args, uint64_t* step) {
   return SI_STEP_VALID;
 }
 
-static int cmd_info(char *args) {
-
-  Log("Given argument is: %s\n", args);
+enum {INFO_ARG_INVALID = 0x001, INFO_ARG_REGISTER = 0x010, INFO_ARG_WATCHPOINT = 0x100,};
+static int parse_info_arg(char* args) {
+  int parse_result = INFO_ARG_INVALID;
 
   if (NULL == args) {
     Log("Invalid argument: usage info [r|w]");
-    return 1;
+    return INFO_ARG_INVALID;
   }
 
   /* Read out all the leading white-spaces, yes, it is allowed */
@@ -242,7 +242,7 @@ static int cmd_info(char *args) {
   /* Boil out if the current character is the null char */
   if (*args == '\0') {
     Log("Empty argument: usage info [r|w]");
-    return 1;
+    return INFO_ARG_INVALID;
   }
 
   /* Get the sub-command */
@@ -250,16 +250,48 @@ static int cmd_info(char *args) {
 #ifdef DEV_LOG
     Log("DEV LOG: info sub-command is found %c", *args);
 #endif /*DEV_LOG*/
-    /* Display the value stored in the specified register */
-    TO_BE_IMPLEMENTED();
+    parse_result = INFO_ARG_REGISTER;
   } else if (*args == 'w') {
 #ifdef DEV_LOG
     Log("DEV LOG: info sub-command is found %c", *args);
 #endif /*DEV_LOG*/
+    parse_result = INFO_ARG_WATCHPOINT;
+  } else {
+    Log("Invalid argument: usage info [r|w]");
+    return INFO_ARG_INVALID;
+  }
+
+  /* Read out all trailing whitespaces */
+  while(*args == ' ') {
+    args++;
+  }
+
+  /* Boil out if the current character is not null char */
+  if (*args != '\0') {
+#ifdef DEV_LOG
+    Log("DEV LOG: invalid sub-command is detected %s", args);
+#endif /*DEV_LOG*/
+    Log("Invalid sub-command: usage info [r|w]");
+    return INFO_ARG_INVALID;
+  }
+
+  return parse_result;
+}
+
+
+static int cmd_info(char *args) {
+  Log("Given argument is: %s\n", args);
+  int parse_result = parse_info_arg(args);
+  if (INFO_ARG_INVALID == parse_result) {
+    return 1;
+  }
+
+  if (INFO_ARG_REGISTER == parse_result) {
+    TO_BE_IMPLEMENTED();
+  } else if (INFO_ARG_WATCHPOINT == parse_result) {
     TO_BE_IMPLEMENTED();
   } else {
-    Log("Invalid sub-command: usage info [r|w]");
-    return 1;
+    ;
   }
 
   return 0;
