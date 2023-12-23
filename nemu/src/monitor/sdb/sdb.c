@@ -67,7 +67,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute given number of step(s), one by default", cmd_si},
-  {"info", "r\n: \t Print the register value\n w\n: \t Print the watch-point status\n", cmd_info},
+  {"info", "r: Print the register value | w: Print the watch-point status", cmd_info},
   /* TODO: Add more commands */
 
 };
