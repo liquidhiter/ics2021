@@ -6,8 +6,9 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-
+  TK_NOTYPE = 256,
+  TK_EQ,
+  TK_DECIMAL,
   /* TODO: Add more token types */
 
 };
@@ -27,6 +28,7 @@ static struct rule {
   {"-", '-'},           // minus
   {"\\*", '*'},         // multiply
   {"\\/", '/'},         // divide
+  {"\\d", TK_DECIMAL},   // decimal digit
 };
 
 #define NR_REGEX ARRLEN(rules)
