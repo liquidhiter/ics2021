@@ -16,8 +16,57 @@ static char *code_format =
 "  return 0; "
 "}";
 
+/* Index of the buffer used to track the available space in buffer */
+static uint32_t buf_idx = 0;
+
+/**
+ * @brief Return a random uint32_t integer smaller than n
+ * 
+ * @param n
+ * @source https://www.geeksforgeeks.org/generating-random-number-range-c/, partially refer to this page
+ * @return uint32_t 
+ */
+static uint32_t choose(uint32_t n) {
+  /* Saturate at the number 0 */
+  if (n == 0) return 0;
+
+  return rand() % n;
+}
+
+/**
+ * @brief 
+ * 
+ */
+static void gen_num() {
+  while (1) {
+    uint32_t rand_num = choose(UINT32_MAX);
+
+    /* Copy the random integer byte by byte to find minimum number of bytes needed to store it */
+    uint8_t num_buf[sizeof(uint32_t)];
+    uint8_t idx = 0;
+    while (rand_num > 0) {
+      num_buf[idx++] = rand_num % 256;
+      rand_num >>= 8;
+    }
+
+    /* Check available space in the buf >= buf_idx */
+    if ((65536 - buf_idx) < idx) {
+      continue;
+    }
+
+    /* Copy random number into the buf */
+    memcpy(buf + buf_idx, num_buf, idx);
+
+    break;
+}
+
+
 static void gen_rand_expr() {
-  buf[0] = '\0';
+  switch(choose(3)) {
+    case 0: gen_num(); break;
+    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+  }
 }
 
 int main(int argc, char *argv[]) {
